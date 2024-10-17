@@ -1,0 +1,45 @@
+// Function to find the position of the King and the Rook
+function findPosition(piece, board) {
+    for (let i = 0; i < 8; i++) {
+        for (let j = 0; j < 8; j++) {
+            if (board[i][j] === piece) {
+                return [i, j]; // Return [row, column]
+            }
+        }
+    }
+    return null;
+}
+
+// Function to check if King is in CHECK
+function isKingInCheck(board) {
+    let [kingRow, kingCol] = findPosition('K', board);
+    let [rookRow, rookCol] = findPosition('R', board);
+    
+    // Check if they are on the same row or column
+    if (kingRow === rookRow) {
+        // Check horizontally if there is no obstacle
+        let minCol = Math.min(kingCol, rookCol);
+        let maxCol = Math.max(kingCol, rookCol);
+        for (let col = minCol + 1; col < maxCol; col++) {
+            if (board[kingRow][col] !== ".") {
+                return "Safe";
+            }
+        }
+        return "CHECK"; // No obstacle in the row
+    } else if (kingCol === rookCol) {
+        // Check vertically if there is no obstacle
+        let minRow = Math.min(kingRow, rookRow);
+        let maxRow = Math.max(kingRow, rookRow);
+        for (let row = minRow + 1; row < maxRow; row++) {
+            if (board[row][kingCol] !== ".") {
+                return "Safe";
+            }
+        }
+        return "CHECK"; // No obstacle in the column
+    }
+    
+    return "Safe"; // Not on the same row or column
+}
+
+// Run the function and output the result
+console.log(isKingInCheck(board)); // Output: "Safe"
