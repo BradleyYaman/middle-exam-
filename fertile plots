@@ -1,0 +1,58 @@
+// Example land data and weather data
+const land = [
+    ["fertile", "dry", "fertile", "fertile"],
+    ["barren", "dry", "dry", "fertile"],
+    ["fertile", "fertile", "fertile", "dry"],
+    ["dry", "dry", "dry", "dry"]
+];
+
+const weatherData = {
+    temperature: 28,  // in Celsius
+    humidity: 55,     // percentage
+    windSpeed: 12     // in km/h
+};
+
+// Check if the weather is suitable for planting
+function isWeatherSuitable(weather) {
+    const { temperature, humidity, windSpeed } = weather;
+    return (temperature >= 20 && temperature <= 30) &&
+           (humidity > 50) &&
+           (windSpeed < 15);
+}
+
+// Calculate fertile plots and validate rows
+function calculateFertilePlots(land) {
+    let totalFertilePlots = 0;
+    let plotsToBePlanted = 0;
+
+    for (let row of land) {
+        let fertileCount = row.filter(plot => plot === "fertile").length;
+
+        // If less than 50% of the row is fertile, mark the whole row as dry
+        if (fertileCount < row.length / 2) {
+            row = row.map(() => "dry");
+        } else {
+            totalFertilePlots += fertileCount;
+            plotsToBePlanted += fertileCount;
+        }
+    }
+
+    return { totalFertilePlots, plotsToBePlanted };
+}
+
+// Main function
+function managePlantation(land, weatherData) {
+    const { totalFertilePlots, plotsToBePlanted } = calculateFertilePlots(land);
+
+    // Output results
+    console.log(Total fertile plots: ${totalFertilePlots});
+    console.log(Total plots to be planted: ${plotsToBePlanted});
+
+    // Check weather suitability
+    if (!isWeatherSuitable(weatherData)) {
+        console.log("Weather is not suitable for planting");
+    }
+}
+
+// Run the plantation management system
+managePlantation(land, weatherData);
